@@ -79,7 +79,7 @@ function randomTetromino(){
         shape: tetromino.shape,
         color: tetromino.color,
         row: 0,
-        col: Math.floor(Math.random()*(BOARD_WIDTH - tetromino.shape[0].length +1))
+        col: Math.floor(Math.random()*(BOARD_WIDTH - tetromino.shape[0].length +1))//proporciona el ancho del tetromino en unidades de columna.
     };
 }
 // Save the function into a variable //
@@ -103,11 +103,12 @@ function drawTetromino(){
                 block.style.top = (row + r) * 24 + 'px';
                 block.style.left = (col + c) * 24 + 'px';
                 block.setAttribute('id',`block-${row + r}-${col + c}`);
+                document.getElementById("game_board").appendChild(block);
             }
         }
     }
-
 }
+
 
 
 
