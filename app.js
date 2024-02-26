@@ -8,10 +8,8 @@ const breaksound = document.createElement('audio');
 const drop = document.createElement('audio');
 let rotatedShape;
 
-//GET AUDIOS//
-bgm.setAttribute("src", "./assets/bgm.mp3");
-breaksound.setAttribute("src", "./assets/break.mp3");
-breaksound.setAttribute("src", "./assets/drop.mp3");
+//code audios here
+
 
 for (let row = 0; row < BOARD_HEIGHT; row++){
     board[row]=[]
@@ -30,7 +28,7 @@ const tetrominoes = [
     },
     {
         shape:[
-            [0,2,0]
+            [0,2,0],
             [2,2,2]
         ],
         color: '#7925dd',
@@ -59,7 +57,7 @@ const tetrominoes = [
 // 2 ways to write this code //
     {
         shape:[
-            [0,0,6]
+            [0,0,6],
             [6,6,6]
         ],
         color:'#ff6400'
@@ -70,19 +68,19 @@ const tetrominoes = [
         color:'#00b5ff'
     },
 ];
-// Ways and colors random
+
 function randomTetromino(){
-    const index = Math.floor(Math.random())*tetrominoes.length;
+    const index = Math.floor(Math.random() * tetrominoes.length);
 
     const tetromino = tetrominoes[index];
     return {
         shape: tetromino.shape,
         color: tetromino.color,
         row: 0,
-        col: Math.floor(Math.random()*(BOARD_WIDTH - tetromino.shape[0].length +1))//proporciona el ancho del tetromino en unidades de columna.
+        col: Math.floor(Math.random() * (BOARD_WIDTH - tetromino.shape[0].length + 1))
     };
 }
-// Save the function into a variable //
+
 let currentTetromino = randomTetromino();
 let currentGhostTetromino;
 
@@ -93,7 +91,7 @@ function drawTetromino(){
     const row = currentTetromino.row;
     const col = currentTetromino.col;
 
-    for(let r = 0; r < shape.lenght; r++){
+    for(let r = 0; r < shape.length; r++){
         for( let c = 0; c < shape[r].length; c++){
             if(shape[r][c]){
                 const block = document.createElement('div')
@@ -109,9 +107,49 @@ function drawTetromino(){
     }
 }
 
+function eraseTetromino(){
+    for(let i = 0; i < currentTetromino.shape.length; i++){
+        for(let j = 0; j < currentTetromino.shape[i].length; j++){
+            if(currentTetromino.shape[i][j] !==0){
+                let row = currentTetromino.row + i;
+                let col = currentTetromino.col + j;
+                let block = document.getElementById(`block-${row}-${col}`);
 
+                if(block){
+                    document.getElementById('game_board').removeChild(block);
+                }
+            }
+        }
+    }
+}
 
+function moveTetromino(direction){
+    let row = currentTetromino.row;
+    let col = currentTetromino.col;
 
+    if(direction === 'left'){
+        eraseTetromino();
+        col-=1;
+        currentTetromino.col = col;
+        currentTetromino.row = row;
+        drawTetromino();
+    } else if (direction === 'right'){
+        eraseTetromino();
+        col+=1;
+        currentTetromino.col = col;
+        currentTetromino.row = row;
+        drawTetromino();
+    } else {
+        //down
+            eraseTetromino();
+            row++;
+            currentTetromino.col = col;
+            currentTetromino.row = row;
+            drawTetromino();
+    }
+}
 
+drawTetromino();
+setInterval( moveTetromino('down'), 500);
 
 
